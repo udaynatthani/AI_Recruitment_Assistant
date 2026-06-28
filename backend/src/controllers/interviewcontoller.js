@@ -1,4 +1,5 @@
 const pool = require("../config/db");
+const { sendInterviewEmail } = require("../services/mailservice");
 
 const scheduleInterview = async (req, res) => {
     try{
@@ -52,6 +53,38 @@ const scheduleInterview = async (req, res) => {
                 notes
             ]
           );
+
+          const candidateResult = await pool.query(
+            `
+            SELECT name, email
+            FROM users
+            WHERE id = $1
+            `,
+            [candidate_id]
+          );
+          const jobResult = await pool.query(
+            `
+            SELECT title, company_name
+            FROM jobs
+            WHERE id = $1
+            `,
+            [job_id]
+          );
+         try {await sendInterviewEmail({
+            to: candidateResult.rows[0].email,
+            candidateName: candidateResult.rows[0].name,
+            companyName: jobResult.rows[0].company_name,
+            jobTitle: jobResult.rows[0].title,
+            interviewDate: interview_date,
+            interviewTime: interview_time,
+            interviewMode: interview_mode,
+            meetingLink: meeting_link,
+            location: location,
+            
+          });}catch(error){
+            console.error("Error sending interview email:", error);
+          }
+
           res.status(201).json({
             success:true,
             message:"Interview scheduled successfully",
