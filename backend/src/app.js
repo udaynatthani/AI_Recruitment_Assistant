@@ -1,0 +1,26 @@
+const express = require('express');
+const cors = require('cors');
+require('dotenv').config();
+const authRoutes = require('./routes/authroutes');
+const jobRoutes = require("./routes/jobroutes");
+const applicationRoutes = require("./routes/applicationroutes");
+const resumeroutes = require("./routes/resumeroutes");
+const atsRoutes = require("./routes/atsroutes");
+const interviewRoutes = require("./routes/interviewroutes");
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+app.use('/api/auth', authRoutes);
+app.use("/api/jobs", jobRoutes);      
+app.use("/api/applications", applicationRoutes);
+app.use("/api/resumes", resumeroutes);
+app.use("/api/ats", atsRoutes);
+app.use("/api/interviews", interviewRoutes);
+
+app.get('/', (req, res) => {  
+    res.json({ message: 'Hello from the backend!' });
+});
+
+module.exports = app;
