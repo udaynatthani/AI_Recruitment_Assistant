@@ -10,6 +10,8 @@ const interviewRoutes = require("./routes/interviewroutes");
 const interviewaiRoutes = require("./routes/interviewairoutes");
 const answerRoutes = require("./routes/answerroutes");
 const reportRoutes = require("./routes/reportroutes");
+const roadmapRoutes = require("./routes/roadmaproutes");
+
 
 const app = express();
 
@@ -24,6 +26,7 @@ app.use("/api/interviews", interviewRoutes);
 app.use("/api/interviewai", interviewaiRoutes);
 app.use("/api/answers", answerRoutes);
 app.use("/api/interview-report", reportRoutes);
+app.use("/api/roadmap", roadmapRoutes);
 
 app.get('/', (req, res) => {  
     res.json({ message: 'Hello from the backend!' });
