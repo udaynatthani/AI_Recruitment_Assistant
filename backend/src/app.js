@@ -7,6 +7,9 @@ const applicationRoutes = require("./routes/applicationroutes");
 const resumeroutes = require("./routes/resumeroutes");
 const atsRoutes = require("./routes/atsroutes");
 const interviewRoutes = require("./routes/interviewroutes");
+const interviewaiRoutes = require("./routes/interviewairoutes");
+const answerRoutes = require("./routes/answerroutes");
+const reportRoutes = require("./routes/reportroutes");
 
 const app = express();
 
@@ -18,6 +21,9 @@ app.use("/api/applications", applicationRoutes);
 app.use("/api/resumes", resumeroutes);
 app.use("/api/ats", atsRoutes);
 app.use("/api/interviews", interviewRoutes);
+app.use("/api/interviewai", interviewaiRoutes);
+app.use("/api/answers", answerRoutes);
+app.use("/api/interview-report", reportRoutes);
 
 app.get('/', (req, res) => {  
     res.json({ message: 'Hello from the backend!' });

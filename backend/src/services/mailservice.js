@@ -78,7 +78,7 @@ const sendInterviewEmail = async ({
       `
       }
 
-    </table>
+    </table> 
 
     <br>
 
