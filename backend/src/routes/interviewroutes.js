@@ -15,7 +15,7 @@ const { authenticate } = require("../middleware/authmiddleware");
 const authorize = require("../middleware/authorize");
 
 router.post(
-    "/",
+    "/:slug",
     authenticate,
     authorize("recruiter"),
     scheduleInterview

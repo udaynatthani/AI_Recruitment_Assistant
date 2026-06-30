@@ -143,13 +143,21 @@ const getjobbyid = async (req,res)=>{
 
 const updatejob  = async (req,res)=>{
     try{
-        // const {id}= req.params;
-        const slug = req.params;
+        console.log("Params:", req.params);
 
-        const job = await pool.query(
-            "SELECT * FROM jobs WHERE slug = $1",
-            [slug]
-          );
+    const { slug } = req.params;
+
+    console.log("Slug:", slug);
+
+    const job = await pool.query(
+      `
+      SELECT *
+      FROM jobs
+      WHERE slug = $1
+      `,
+      [slug]
+    );
+          console.log(job.rows);
           
           if (job.rows.length === 0) {
             return res.status(404).json({
@@ -220,7 +228,7 @@ const updatejob  = async (req,res)=>{
     }catch(error){
         res.status(500).json({
             success:false,
-            message:"server failed",
+            message:error.message,
         });
     }   
 };
@@ -268,7 +276,7 @@ const deletejob = async (req,res)=>{
     }catch(error){
         res.status(500).json({
             success:false,
-            message:"server failed",
+            message:error.message
         });
     }
 };

@@ -12,10 +12,10 @@ const authorize = require("../middleware/authorize");
 
 
 router.post(
-  "/",
-  authenticate,
-  authorize("candidate"),
-  applyjob
+    "/:slug",
+    authenticate,
+    authorize("candidate"),
+    applyjob
 );
 
 router.get(

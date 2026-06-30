@@ -2,31 +2,125 @@ const pool = require("../config/db");
 const { sendInterviewEmail } = require("../services/mailservice");
 
 const scheduleInterview = async (req, res) => {
-    try{
+
+    try {
+
         const recruiterId = req.user.id;
-        
-        const {
+
+        const { slug } = req.params;
+
+        let {
+
             candidate_id,
-            job_id,
             interview_date,
             interview_time,
             interview_mode,
             meeting_link,
             location,
             notes
-          } = req.body;
-          if(
-!candidate_id || !job_id || !interview_date || !interview_time || !interview_mode
-          ){
+
+        } = req.body;
+
+        // Find Job by Slug
+        const jobResult = await pool.query(
+            `
+            SELECT id,title,company_name,created_by
+            FROM jobs
+            WHERE slug = $1
+            `,
+            [slug]
+        );
+
+        if (jobResult.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Job not found"
+            });
+        }
+
+        const job = jobResult.rows[0];
+
+        // Ownership Check
+        if (job.created_by !== recruiterId) {
+            return res.status(403).json({
+                success: false,
+                message: "Unauthorized"
+            });
+        }
+
+        // Normalize Mode
+        interview_mode =
+            interview_mode.charAt(0).toUpperCase() +
+            interview_mode.slice(1).toLowerCase();
+
+        if (!["Online", "Offline"].includes(interview_mode)) {
             return res.status(400).json({
                 success: false,
-                message:"please provide all required fields"
+                message: "Interview mode must be Online or Offline"
             });
+        }
 
-          }
+        // Online Validation
+        if (interview_mode === "Online") {
 
-          const result = await pool.query(
-            `INSERT INTO interviews
+            if (!meeting_link) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Meeting link is required"
+                });
+            }
+
+            location = null;
+        }
+
+        // Offline Validation
+        if (interview_mode === "Offline") {
+
+            if (!location) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Location is required"
+                });
+            }
+
+            meeting_link = null;
+        }
+
+        // Future Date Validation
+        const interviewDateTime = new Date(
+            `${interview_date}T${interview_time}`
+        );
+
+        if (interviewDateTime <= new Date()) {
+            return res.status(400).json({
+                success: false,
+                message: "Interview must be scheduled in the future"
+            });
+        }
+
+        // Duplicate Interview Check
+        const existing = await pool.query(
+            `
+            SELECT id
+            FROM interviews
+            WHERE candidate_id=$1
+            AND job_id=$2
+            AND status!='Cancelled'
+            `,
+            [candidate_id, job.id]
+        );
+
+        if (existing.rows.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Interview already scheduled"
+            });
+        }
+
+        // Insert Interview
+        const interview = await pool.query(
+            `
+            INSERT INTO interviews
             (
                 candidate_id,
                 recruiter_id,
@@ -38,13 +132,14 @@ const scheduleInterview = async (req, res) => {
                 location,
                 notes
             )
-            values
+            VALUES
             ($1,$2,$3,$4,$5,$6,$7,$8,$9)
-            returning *`,
+            RETURNING *
+            `,
             [
                 candidate_id,
                 recruiterId,
-                job_id,
+                job.id,
                 interview_date,
                 interview_time,
                 interview_mode,
@@ -52,52 +147,48 @@ const scheduleInterview = async (req, res) => {
                 location,
                 notes
             ]
-          );
+        );
 
-          const candidateResult = await pool.query(
+        
+        const candidate = await pool.query(
             `
-            SELECT name, email
+            SELECT name,email
             FROM users
-            WHERE id = $1
+            WHERE id=$1
             `,
             [candidate_id]
-          );
-          const jobResult = await pool.query(
-            `
-            SELECT title, company_name
-            FROM jobs
-            WHERE id = $1
-            `,
-            [job_id]
-          );
-         try {await sendInterviewEmail({
-            to: candidateResult.rows[0].email,
-            candidateName: candidateResult.rows[0].name,
-            companyName: jobResult.rows[0].company_name,
-            jobTitle: jobResult.rows[0].title,
+        );
+        
+
+        await sendInterviewEmail({
+            to: candidate.rows[0].email,
+            candidateName: candidate.rows[0].name,
+            companyName: job.company_name,
+            jobTitle: job.title,
             interviewDate: interview_date,
             interviewTime: interview_time,
             interviewMode: interview_mode,
             meetingLink: meeting_link,
-            location: location,
-            
-          });}catch(error){
-            console.error("Error sending interview email:", error);
-          }
-
-          res.status(201).json({
-            success:true,
-            message:"Interview scheduled successfully",
-            interview:result.rows[0],
-          });
-          
-    }catch(error){
-        console.error(error);
-        res.status(500).json({
-            success:false,
-            message:"server failed",
+            location
         });
+
+        res.status(201).json({
+            success: true,
+            message: "Interview scheduled successfully",
+            interview: interview.rows[0]
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
     }
+
 };
 
 const getMyInterviews = async (req,res)=>{
@@ -130,7 +221,7 @@ const getMyInterviews = async (req,res)=>{
     console.error(error);
     res.status(500).json({
         success:false,
-        message:"server failed",
+        message:error.message,
     });
 
 }

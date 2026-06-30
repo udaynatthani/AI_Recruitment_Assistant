@@ -25,7 +25,7 @@ router.post(
 );
 
 router.put(
-  "/:id",
+  "/:slug",
   authenticate,
   authorize("recruiter"),
   updatejob

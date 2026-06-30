@@ -1,62 +1,81 @@
 const pool = require("../config/db");
 
-const applyjob = async (req,res) =>{
-    try{
+const applyjob = async (req, res) => {
+    try {
+
         const candidate_id = req.user.id;
+        const { slug } = req.params;
 
-        const {job_id}= req.body;
-
-        if(!job_id){
-            return res.status(400).json({
-                success : false,
-                message : "job id is required",
-            });
-        }
+        // Find job using slug
         const job = await pool.query(
-           " select * from jobs where id = $1",
-           [job_id]
-        );
-        if(job.rows.length === 0){
-            return res.status(404).json({
-                success:false,
-                message:"Job not found",
-            });
-        } 
-        const alreadyapplied = await pool.query(
-           ` select * from applications 
-            where candidate_id = $1 and job_id = $2`,   
-            [candidate_id,job_id] 
+            `
+            SELECT id
+            FROM jobs
+            WHERE slug = $1
+            `,
+            [slug]
         );
 
-        if(alreadyapplied.rows.length > 0){
-            return res.status(400).json({
-                success:false,
-                message:"You have already applied for this job",
+        if (job.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Job not found",
             });
         }
 
+        const job_id = job.rows[0].id;
+
+        // Check if already applied
+        const alreadyApplied = await pool.query(
+            `
+            SELECT *
+            FROM applications
+            WHERE candidate_id = $1
+            AND job_id = $2
+            `,
+            [candidate_id, job_id]
+        );
+
+        if (alreadyApplied.rows.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message: "You have already applied for this job",
+            });
+        }
+
+        // Apply
         const result = await pool.query(
-            `insert into applications
-            (candidate_id,job_id)
-            values($1,$2)
-            returning *`,
-            [candidate_id,job_id]
+            `
+            INSERT INTO applications
+            (
+                candidate_id,
+                job_id
+            )
+            VALUES
+            ($1,$2)
+            RETURNING *
+            `,
+            [candidate_id, job_id]
         );
 
         res.status(201).json({
-            success:true,
-            message:"Job application submitted successfully",
-            application:result.rows[0],
+            success: true,
+            message: "Job application submitted successfully",
+            application: result.rows[0],
         });
-    }catch (error){
-        console.error(error);
-        res.status(500).json({
-            success:false,
-            message:"server failed",
-        });
-    }   
-};
 
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Server failed",
+        });
+
+    }
+};
+    
 const getmyapplications = async (req,res)=>{
     try{
         const candidate_id = req.user.id;

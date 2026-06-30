@@ -11,7 +11,7 @@ const {authenticate}= require("../middleware/authmiddleware");
 const authorize = require("../middleware/authorize");
 
 router.post(
-    "/:jobId",
+    "/:slug",
     authenticate,
     authorize("candidate"),
     createmockinterview

@@ -49,7 +49,9 @@ const uploadresume = async (req, res) => {
 // console.log(parsedResume.text);
 
     const resumeUrl = cloudinaryResult.secure_url;
-    
+    const userId = req.user.id;
+
+
     const existingAnalysis = await pool.query(
         `
         SELECT *
@@ -77,7 +79,6 @@ const uploadresume = async (req, res) => {
     // console.log(analysis);
     
 
-    const userId = req.user.id;
 
     const result = await pool.query(
       `
