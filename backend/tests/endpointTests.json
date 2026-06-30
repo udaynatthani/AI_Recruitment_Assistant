@@ -10,24 +10,95 @@
     {
       "name": "register recuriter",
       "request": {
-        "method": "GET",
-        "header": []
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\":\"Google Recruiter\",\r\n    \"email\":\"megha@gmail.com\",\r\n    \"password\":\"123456\",\r\n    \"role\":\"recruiter\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/auth/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
       },
       "response": []
     },
     {
       "name": "login recruiter",
       "request": {
-        "method": "GET",
-        "header": []
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"megha@gmail.com\",\r\n    \"password\":\"123456\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
       },
       "response": []
     },
     {
       "name": "create job",
       "request": {
-        "method": "GET",
-        "header": []
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6InJlY3J1aXRlciIsImlhdCI6MTc4Mjc5MzMxMCwiZXhwIjoxNzgzMzk4MTEwfQ.LgqGpWkllpIx1-55CLwNhqh_sv5Ag19qdDN0wrLYuJ4",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"title\":\"backend developer\",\r\n    \"company_name\":\"meshnet\",\r\n    \"location\":\"Bangalore\",\r\n    \"salary\":\"8 LPA\",\r\n    \"experience\":\"0 Years\",\r\n    \"job_type\":\"Full Time\",\r\n    \"required_skills\":\"React,JavaScript,CSS\",\r\n    \"description\":\"Looking for React Developer.\",\r\n    \"application_deadline\":\"2026-07-03\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/jobs",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "jobs"
+          ]
+        }
       },
       "response": []
     },
@@ -35,7 +106,19 @@
       "name": "get all jobs",
       "request": {
         "method": "GET",
-        "header": []
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/jobs",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "jobs"
+          ]
+        }
       },
       "response": []
     },
@@ -43,15 +126,56 @@
       "name": "get job by slug",
       "request": {
         "method": "GET",
-        "header": []
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/jobs/backend-developer-meshnet-98956c",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "jobs",
+            "backend-developer-meshnet-98956c"
+          ]
+        }
       },
       "response": []
     },
     {
       "name": "update job",
       "request": {
-        "method": "GET",
-        "header": []
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6InJlY3J1aXRlciIsImlhdCI6MTc4Mjc5MzMxMCwiZXhwIjoxNzgzMzk4MTEwfQ.LgqGpWkllpIx1-55CLwNhqh_sv5Ag19qdDN0wrLYuJ4",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"title\":\"Senior Frontend Developer\",\r\n    \"company_name\":\"Google\",\r\n    \"location\":\"Hyderabad\",\r\n    \"salary\":\"18 LPA\",\r\n    \"experience\":\"3 Years\",\r\n    \"job_type\":\"Full Time\",\r\n    \"required_skills\":\"React,Next.js,TypeScript\",\r\n    \"description\":\"Senior React Developer\",\r\n    \"application_deadline\":\"2026-07-03\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/jobs/backend-developer-meshnet-98956c",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "jobs",
+            "backend-developer-meshnet-98956c"
+          ]
+        }
       },
       "response": []
     },
@@ -66,32 +190,137 @@
     {
       "name": "register candidate",
       "request": {
-        "method": "GET",
-        "header": []
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\":\"yash\",\r\n    \"email\":\"yash@gmail.com\",\r\n    \"password\":\"123456\",\r\n    \"role\":\"candidate\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/auth/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
       },
       "response": []
     },
     {
       "name": "login candidate",
       "request": {
-        "method": "GET",
-        "header": []
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"yash@gmail.com\",\r\n    \"password\":\"123456\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
       },
       "response": []
     },
     {
       "name": "upload resume",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
       "request": {
         "method": "GET",
-        "header": []
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6ImNhbmRpZGF0ZSIsImlhdCI6MTc4MjgyMTU2MSwiZXhwIjoxNzgzNDI2MzYxfQ.gFTYtDeGezoFJdI0zJ-EIQeHwTRPKUdPvX6bUcMd484",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "resume",
+              "type": "file",
+              "uuid": "f86e9811-e1ee-49d1-aaee-7afae0a95e88",
+              "src": "/C:/Users/Asus/Downloads/Natthani_Uday_resume_18-06-26.pdf"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/applications/my",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "applications",
+            "my"
+          ]
+        }
       },
       "response": []
     },
     {
       "name": "apply job",
       "request": {
-        "method": "GET",
-        "header": []
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6ImNhbmRpZGF0ZSIsImlhdCI6MTc4MjgyMTU2MSwiZXhwIjoxNzgzNDI2MzYxfQ.gFTYtDeGezoFJdI0zJ-EIQeHwTRPKUdPvX6bUcMd484",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/applications/backend-developer-meshnet-98956c",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "applications",
+            "backend-developer-meshnet-98956c"
+          ]
+        }
       },
       "response": []
     },
@@ -99,15 +328,70 @@
       "name": "my application",
       "request": {
         "method": "GET",
-        "header": []
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6ImNhbmRpZGF0ZSIsImlhdCI6MTc4MjgyMTU2MSwiZXhwIjoxNzgzNDI2MzYxfQ.gFTYtDeGezoFJdI0zJ-EIQeHwTRPKUdPvX6bUcMd484",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5000/api/applications/my",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "applications",
+            "my"
+          ]
+        }
       },
       "response": []
     },
     {
       "name": "schedule interview",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
       "request": {
         "method": "GET",
-        "header": []
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6InJlY3J1aXRlciIsImlhdCI6MTc4Mjc5MzMxMCwiZXhwIjoxNzgzMzk4MTEwfQ.LgqGpWkllpIx1-55CLwNhqh_sv5Ag19qdDN0wrLYuJ4",
+            "type": "text"
+          },
+          {
+            "key": "recruiterId",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6InJlY3J1aXRlciIsImlhdCI6MTc4Mjc5MzMxMCwiZXhwIjoxNzgzMzk4MTEwfQ.LgqGpWkllpIx1-55CLwNhqh_sv5Ag19qdDN0wrLYuJ4",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"candidate_id\": 5,\r\n    \"interview_date\": \"2026-07-10\",\r\n    \"interview_time\": \"10:30:00\",\r\n    \"interview_mode\": \"Online\",\r\n    \"meeting_link\": \"https://meet.google.com/abc-defg\",\r\n    \"notes\": \"Technical Round\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/interviews/candidate",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "interviews",
+            "candidate"
+          ]
+        }
       },
       "response": []
     },
@@ -115,7 +399,26 @@
       "name": "get recriter interviews",
       "request": {
         "method": "GET",
-        "header": []
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6InJlY3J1aXRlciIsImlhdCI6MTc4Mjc5MzMxMCwiZXhwIjoxNzgzMzk4MTEwfQ.LgqGpWkllpIx1-55CLwNhqh_sv5Ag19qdDN0wrLYuJ4",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5000/api/interviews/recruiter",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "interviews",
+            "recruiter"
+          ]
+        }
       },
       "response": []
     },
@@ -123,31 +426,125 @@
       "name": "get candidate interview",
       "request": {
         "method": "GET",
-        "header": []
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6ImNhbmRpZGF0ZSIsImlhdCI6MTc4MjgyMTU2MSwiZXhwIjoxNzgzNDI2MzYxfQ.gFTYtDeGezoFJdI0zJ-EIQeHwTRPKUdPvX6bUcMd484",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5000/api/interviews/my",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "interviews",
+            "my"
+          ]
+        }
       },
       "response": []
     },
     {
       "name": "update interview status",
       "request": {
-        "method": "GET",
-        "header": []
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6InJlY3J1aXRlciIsImlhdCI6MTc4Mjc5MzMxMCwiZXhwIjoxNzgzMzk4MTEwfQ.LgqGpWkllpIx1-55CLwNhqh_sv5Ag19qdDN0wrLYuJ4",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"status\":\"Completed\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/interviews/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "interviews",
+            "1"
+          ]
+        }
       },
       "response": []
     },
     {
       "name": "mock interview",
       "request": {
-        "method": "GET",
-        "header": []
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6ImNhbmRpZGF0ZSIsImlhdCI6MTc4MjgyMTU2MSwiZXhwIjoxNzgzNDI2MzYxfQ.gFTYtDeGezoFJdI0zJ-EIQeHwTRPKUdPvX6bUcMd484",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5000/api/interviewai/backend-developer-meshnet-98956c",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "interviewai",
+            "backend-developer-meshnet-98956c"
+          ]
+        }
       },
       "response": []
     },
     {
       "name": "answer",
       "request": {
-        "method": "GET",
-        "header": []
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6ImNhbmRpZGF0ZSIsImlhdCI6MTc4MjgyMTU2MSwiZXhwIjoxNzgzNDI2MzYxfQ.gFTYtDeGezoFJdI0zJ-EIQeHwTRPKUdPvX6bUcMd484",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"question\":\"Explain React Hooks\",\r\n    \"answer\":\"React Hooks allow functional components to use state and lifecycle methods using useState and useEffect.\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/answers/4",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "answers",
+            "4"
+          ]
+        }
       },
       "response": []
     },
@@ -155,7 +552,26 @@
       "name": "interview report",
       "request": {
         "method": "GET",
-        "header": []
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6ImNhbmRpZGF0ZSIsImlhdCI6MTc4MjgyMTU2MSwiZXhwIjoxNzgzNDI2MzYxfQ.gFTYtDeGezoFJdI0zJ-EIQeHwTRPKUdPvX6bUcMd484",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5000/api/interview-report/4",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "interview-report",
+            "4"
+          ]
+        }
       },
       "response": []
     },
@@ -163,7 +579,26 @@
       "name": "leaning roadmap",
       "request": {
         "method": "GET",
-        "header": []
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6ImNhbmRpZGF0ZSIsImlhdCI6MTc4MjgyMTU2MSwiZXhwIjoxNzgzNDI2MzYxfQ.gFTYtDeGezoFJdI0zJ-EIQeHwTRPKUdPvX6bUcMd484",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5000/api/roadmap/4",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "roadmap",
+            "4"
+          ]
+        }
       },
       "response": []
     },
@@ -171,7 +606,27 @@
       "name": "recruiter dashboard",
       "request": {
         "method": "GET",
-        "header": []
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6InJlY3J1aXRlciIsImlhdCI6MTc4Mjc5MzMxMCwiZXhwIjoxNzgzMzk4MTEwfQ.LgqGpWkllpIx1-55CLwNhqh_sv5Ag19qdDN0wrLYuJ4",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5000/api/recruiter/dashboard/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "recruiter",
+            "dashboard",
+            ""
+          ]
+        }
       },
       "response": []
     }
