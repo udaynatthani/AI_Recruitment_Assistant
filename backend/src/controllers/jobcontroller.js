@@ -1,19 +1,29 @@
 const pool = require("../config/db");
+const generateSlug = require("../utils/generateslug");
 
 const createjob = async (req, res) => {
     try{
-        const {
-            title,
-            company_name,
-            location,
-            salary,
-            experience,
-            job_type,
-            required_skills,
-            description,
-            application_deadline,
-            
-        } = req.body;
+        const
+        {
+           title,
+           company_name,
+           location,
+           salary,
+           experience,
+           job_type,
+           required_skills,
+           description,
+           application_deadline,
+           
+       } = req.body;
+        const recruiterId = req.user.id;
+
+const slug = await generateSlug(
+    title,
+    company_name
+);
+
+    
 // salary is not there in below because many job portal is allowing post without disclose there salary
         if(!title || !company_name || !location  || !experience || !job_type || !required_skills || !description || !application_deadline
         ){
@@ -25,22 +35,43 @@ const createjob = async (req, res) => {
         const created_by = req.user.id;
 
         const result = await pool.query(
-            `INSERT INTO jobs(title, company_name, location, salary, experience, job_type, required_skills, description, application_deadline, created_by)
-            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
-            returning *`,
+            `
+            INSERT INTO jobs
+            (
+            title,
+            company_name,
+            slug,
+            location,
+            salary,
+            experience,
+            job_type,
+            required_skills,
+            description,
+            application_deadline,
+            created_by,
+            recruiter_id
+            )
+            VALUES
+            (
+            $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12
+            )
+            RETURNING *
+            `,
             [
-                title,
-                company_name,
-                location,
-                salary,
-                experience,
-                job_type,
-                required_skills,
-                description,
-                application_deadline,
-                created_by,
+            title,
+            company_name,
+            slug,
+            location,
+            salary,
+            experience,
+            job_type,
+            required_skills,
+            description,
+            application_deadline,
+            recruiterId,
+            recruiterId
             ]
-        );
+            );
         res.status(201).json({
             success: true,
             message: "Job created successfully",
@@ -81,13 +112,17 @@ const getalljob = async (req,res)=>{
 
 const getjobbyid = async (req,res)=>{
     try{
-        const {id}= req.params;
+
+        const slug = req.params;
+        console.log(slug);
+        // const {id}= req.params;
 
         const result = await pool.query(
             `select jobs.* from jobs
-            where id = $1`,
-            [id]
+            where slug = $1`,
+            [slug.id]
         );
+
         if(result.rows.length ===0){
             return res.status(404).json({
                 success:false,
@@ -108,11 +143,12 @@ const getjobbyid = async (req,res)=>{
 
 const updatejob  = async (req,res)=>{
     try{
-        const {id}= req.params;
+        // const {id}= req.params;
+        const slug = req.params;
 
         const job = await pool.query(
-            "SELECT * FROM jobs WHERE id = $1",
-            [id]
+            "SELECT * FROM jobs WHERE slug = $1",
+            [slug]
           );
           
           if (job.rows.length === 0) {
@@ -154,7 +190,7 @@ const updatejob  = async (req,res)=>{
             required_skills=$7,
             description=$8,
             application_deadline=$9
-            WHERE id=$10
+            WHERE slug=$10
             RETURNING *`,
             [
               title,
@@ -166,7 +202,7 @@ const updatejob  = async (req,res)=>{
               required_skills,
               description,
               application_deadline,
-              id,
+              slug,
             ]
             
           );
@@ -191,11 +227,13 @@ const updatejob  = async (req,res)=>{
 
 const deletejob = async (req,res)=>{
     try{
-        const {id} = req.params;
+        const slug = req.params;
+
+        // const {id} = req.params;
 
         const job = await pool.query(
-            "SELECT * FROM jobs WHERE id = $1",
-            [id]
+            "SELECT * FROM jobs WHERE slug = $1",
+            [slug]
           );
           
           if (job.rows.length === 0) {
@@ -213,9 +251,9 @@ const deletejob = async (req,res)=>{
           }
         const result = await pool.query(
             `delete from jobs
-            where id = $1
+            where slug = $1
             returning *`,
-            [id]
+            [slug]
         );
         if(result.rows.length ===0){
             return res.status(404).json({
