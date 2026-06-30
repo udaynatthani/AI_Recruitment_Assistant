@@ -52,6 +52,24 @@ const getinterviewreport = async(req,res)=>{
             problemSolving: average("problemSolvingScore"),
             confidence: average("confidenceScore"),
           };
+          const existingReport = await pool.query(
+            `
+            SELECT *
+            FROM interview_reports
+            WHERE mock_interview_id=$1
+            `,
+            [mockintervieId]
+            );
+            
+            if(existingReport.rows.length>0){
+            
+                return res.status(200).json({
+                    success:true,
+                    cached:true,
+                    report:existingReport.rows[0]
+                });
+            
+            }
       
           const report = await generateinterviewreport(
             averages,

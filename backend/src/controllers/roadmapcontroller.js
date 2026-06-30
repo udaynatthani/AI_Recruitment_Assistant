@@ -57,6 +57,24 @@ const getRoadmap = async (req, res) => {
         message: "Interview report not found",
       });
     }
+    const cacheroadmap = await pool.query(
+        `
+        SELECT *
+        FROM learning_roadmaps
+        WHERE mock_interview_id=$1
+        `,
+        [mockInterviewId]
+        );
+        
+        if(cacheroadmap.rows.length>0){
+        
+            return res.status(200).json({
+                success:true,
+                cached:true,
+                roadmap:cacheroadmap.rows[0].roadmap
+            });
+        
+        }
 
     const roadmap = await generateRoadmap(report.rows[0]);
 

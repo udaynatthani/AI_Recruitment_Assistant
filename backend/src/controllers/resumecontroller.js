@@ -49,6 +49,28 @@ const uploadresume = async (req, res) => {
 // console.log(parsedResume.text);
 
     const resumeUrl = cloudinaryResult.secure_url;
+    
+    const existingAnalysis = await pool.query(
+        `
+        SELECT *
+        FROM resume_analysis
+        WHERE user_id = $1
+        ORDER BY created_at DESC
+        LIMIT 1
+        `,
+        [userId]
+        );
+        
+        if(existingAnalysis.rows.length > 0){
+        
+            return res.status(200).json({
+                success:true,
+                message:"Resume already analyzed",
+                cached:true,
+                analysis:existingAnalysis.rows[0]
+            });
+        
+        }
   
     const analysis = await analyzeResume(parsedResume.text);
 
