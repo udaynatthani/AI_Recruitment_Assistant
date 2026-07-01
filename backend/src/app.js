@@ -12,6 +12,8 @@ const answerRoutes = require("./routes/answerroutes");
 const reportRoutes = require("./routes/reportroutes");
 const roadmapRoutes = require("./routes/roadmaproutes");
 const recruiterDashboardRoutes = require("./routes/recruiterDashboardRoutes");
+const savejobroutes = require("./routes/savejobroutes");
+const coverLetterRoutes = require("./routes/coverletterroutes");
 
 const app = express();
 
@@ -28,6 +30,8 @@ app.use("/api/answers", answerRoutes);
 app.use("/api/interview-report", reportRoutes);
 app.use("/api/roadmap", roadmapRoutes);
 app.use("/api/recruiter/dashboard", recruiterDashboardRoutes);
+app.use("/api/saved-jobs", savejobroutes);
+app.use("/api/cover-letter", coverLetterRoutes);
 
 app.get('/', (req, res) => {  
     res.json({ message: 'Hello from the backend!' });
